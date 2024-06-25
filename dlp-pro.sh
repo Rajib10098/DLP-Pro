@@ -17,7 +17,7 @@ if [[ -e "$input_file" ]]; then
     
     # echo $alnum_image_url
     song_destination="$destination/$album_name"
-    song_temp=$destination/$album_name/temp
+    album_cover_art_folder="$destination/$album_name/Album Cover"
     
     # Creating Song Folder
     if [[ -e "$song_destination" ]]; then
@@ -29,10 +29,10 @@ if [[ -e "$input_file" ]]; then
     fi
     
     # Creating temp Folder
-    if [[ ! -e "$song_temp" ]]; then
-        mkdir "$song_temp"
+    if [[ ! -e "$album_cover_art_folder" ]]; then
+        mkdir "$album_cover_art_folder"
     fi
-    album_image_path="$song_temp/$album_name.png"
+    album_image_path="$album_cover_art_folder/$album_name.png"
     # echo "$album_image_path"
     
     # Downloading album image
