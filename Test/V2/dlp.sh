@@ -52,10 +52,7 @@ if [[ -e "$input_file" ]]; then
     format_totall_song=$(printf "%02d" "$totall_song")
     
     # Print the number of song
-    
-    if (( "$totall_song" != "1" )); then
-        echo "➣ [$format_totall_song]: Track"
-    fi
+    echo "➣ [$format_totall_song]: Totall Song"
     echo "-----------------------------------------------"
     while read -r line; do
         song_index=$(echo "$line" | grep -oP '(?<=song_index=)\d+')
@@ -85,7 +82,62 @@ if [[ -e "$input_file" ]]; then
             
             # Song artist name form .decription file
             song_decription="${song_file_name%.*}.description"
-            artist_name=$(cat "$song_decription" | grep -oP '·\s\K.+')
+            file_to_artist_name() {
+                local description_path="$1"  # Store the path to the description file
+                local row_text="raw-artist7867.txt"  # Temporary file to store unformatted artist names
+                local row_text2="raw-artist7686.txt"  # Temporary file to store formatted artist names
+                local artist_txt="artist-name.txt"   # Final file to store the processed artist names
+                
+                # Extract unformatted artist name from description file
+                unformatted_artist_name=$(cat "$description_path" | grep -oP '·\s\K.+$')
+                
+                # Save unformatted artist name to file
+                echo "$unformatted_artist_name" > "$row_text"
+                
+                # Replace ' · ' with newline character
+                sed -i 's/\s·\s/\n/g' "$row_text"
+                
+                total_artist=0    # Initialize counter for total artists
+                artist_index=0    # Initialize index for iterating over artists
+                
+                # Count artists
+                while IFS= read -r line; do
+                    ((total_artist++))   # Increment total artist count
+                done < "$row_text"
+                
+                # Format artist names
+                while IFS= read -r line; do
+                    ((artist_index++))   # Increment artist index
+                    
+                    if [ "$total_artist" = "1" ]; then   # If there is only one artist
+                        echo -n "$line" > "$row_text2"   # Write the artist name to row_text2
+                    else
+                        if [ $artist_index = "1" ]; then   # For the first artist
+                            echo -n "$line" > "$row_text2"   # Write the artist name to row_text2
+                        else
+                            if [ $total_artist = $artist_index ]; then   # If it's the last artist
+                                echo -n " & $line" >> "$row_text2"   # Append with ' & ' separator
+                            else
+                                echo -n ", $line" >> "$row_text2"   # Append with ', ' separator
+                            fi
+                        fi
+                    fi
+                    
+                done < "$row_text"
+                
+                rm -rf "$row_text"   # Remove the temporary unformatted artist names file
+                
+                # Remove newline characters from final output
+                tr -d '\n' < "$row_text2" > "$artist_txt"   # Remove newlines and save to artist_txt
+                rm -rf "$row_text2"   # Remove the temporary formatted artist names file
+                
+                artist_name=$(cat "$artist_txt")   # Read the final artist names from artist_txt
+                echo "$artist_name"   # Output the final artist names
+            }
+            
+            # Example usage
+            artist_name=$(file_to_artist_name "$song_decription")
+
             
             # Rename song file
             mv "$song_file_name" "$song_name.m4a"
