@@ -133,6 +133,7 @@ if [[ -e "$input_file" ]]; then
                 
                 artist_name=$(cat "$artist_txt")   # Read the final artist names from artist_txt
                 echo "$artist_name"   # Output the final artist names
+                rm -rf "$artist_txt" # Remove artist_txt file
             }
             
             # Example usage
