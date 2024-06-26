@@ -1,10 +1,9 @@
 
 input_file="$1"
-# dlp_song_des='hello.md'
 total_song=0
 destination=~/Music/DLP-PRO
 
-# Song destination Folder
+# Track destination Folder
 if [[ ! -e "$destination" ]]; then
     mkdir "$destination"
 fi
@@ -12,14 +11,13 @@ fi
 
 
 if [[ -e "$input_file" ]]; then
+    #Extracting variable
     alnum_image_url=$(grep -m 1 -oP '(?<=album_image=").*?(?=")' "$input_file")
     album_name=$(grep -m 1 -oP '(?<=album=").*?(?=")' "$input_file")
-    
-    # echo $alnum_image_url
     track_destination="$destination/$album_name"
     album_cover_art_folder="$destination/$album_name/Album Cover"
     
-    # Creating Song Folder
+    # Creating track folder
     if [[ -e "$track_destination" ]]; then
         echo "🗹 Track Folder: '$track_destination'"
     else
@@ -28,14 +26,15 @@ if [[ -e "$input_file" ]]; then
         
     fi
     
-    # Creating temp Folder
+    # Creating album cover art folder if it doesn't exist
     if [[ ! -e "$album_cover_art_folder" ]]; then
         mkdir "$album_cover_art_folder"
     fi
-    album_image_path="$album_cover_art_folder/$album_name.png"
-    # echo "$album_image_path"
     
-    # Downloading album image
+    # Album image path variable
+    album_image_path="$album_cover_art_folder/$album_name.png"
+    
+    # Downloading the album art cover
     if [[ ! -e "$album_image_path" ]]; then
         wget -O "$album_image_path" "$alnum_image_url" > /dev/null 2>&1
         echo "🗹 Album Cover Art (downloaded)"
@@ -43,7 +42,7 @@ if [[ -e "$input_file" ]]; then
     fi
     
     
-    # Calculate how many song are there
+    # Calculate, how many traks are in input_file text (.txt) file
     while read -r line; do
         ((total_song++))
     done < "$input_file"
@@ -59,6 +58,8 @@ if [[ -e "$input_file" ]]; then
         echo "🗹 ($format_total_song): Tracks"
     fi
     echo "-----------------------------------------------"
+
+    # Loop over the "input_file" text (.txt) file variable line by line
     while read -r line; do
         song_index=$(echo "$line" | grep -oP '(?<=song_index=)\d+')
         formatted_track_index=$(printf "%02d" "$song_index")
@@ -67,7 +68,7 @@ if [[ -e "$input_file" ]]; then
         song_url=$(echo "$line" | grep -oP '(?<=song_link=").*?(?=")')
         # artist_name=$(echo "$line" | grep -oP '(?<=artist_name=").*?(?=")')
         release_year=$(echo "$line" | grep -oP '(?<=year=")\d*?(?=")')
-        # echo "$song_path"
+
         
         
         cd "$track_destination"
@@ -145,20 +146,19 @@ if [[ -e "$input_file" ]]; then
             artist_name=$(file_to_artist_name "$song_decription")
             
             
-            # Rename song file
+            # Rename the track's name to song_name
             mv "$song_file_name" "$song_name.m4a"
-            # Remove song's art-cover
+
+            # Removing track's album cover art
             AtomicParsley "$song_path" --artwork REMOVE_ALL --overWrite > /dev/null 2>&1
+
+            #Add new album art cover, track artist name, album name, release year and track index            
             AtomicParsley "$song_path" --artwork "$album_image_path" --artist "$artist_name" --album "$album_name" --year $release_year --tracknum $song_index --overWrite > /dev/null 2>&1
-            # echo "song name: $song_name"
-            # echo "Album name: $album_name"
-            # echo "Track: $song_index"
-            # echo "Release: $release_year"
-            # Delete Description file
+
             rm -rf "$song_decription"
             echo "🗹 ($formatted_track_index): $song_name"
             
-            # echo $artist_name
+
         fi
         cd ~
         
