@@ -19,10 +19,10 @@ if [[ -e "$input_file" ]]; then
     
     # Creating track folder
     if [[ -e "$track_destination" ]]; then
-        echo "🗹 Track Folder: '$track_destination'"
+        echo "🗹 Track Folder: '$track_destination' (Already exist)"
     else
         mkdir "$track_destination"
-        echo "🗹 Track Folder: '$track_destination' (created)"
+        echo "🗹 Track Folder: '$track_destination'"
         
     fi
     
@@ -37,7 +37,9 @@ if [[ -e "$input_file" ]]; then
     # Downloading the album art cover
     if [[ ! -e "$album_image_path" ]]; then
         wget -O "$album_image_path" "$alnum_image_url" > /dev/null 2>&1
-        echo "🗹 Album Cover Art (downloaded)"
+        echo "🗹 Album cover art is downloaded"
+    else
+        echo "🗹 Album cover art already exist"
         
     fi
     
@@ -58,7 +60,7 @@ if [[ -e "$input_file" ]]; then
         echo "🗹 ($format_total_song): Tracks"
     fi
     echo "-----------------------------------------------"
-
+    
     # Loop over the "input_file" text (.txt) file variable line by line
     while read -r line; do
         song_index=$(echo "$line" | grep -oP '(?<=song_index=)\d+')
@@ -68,7 +70,7 @@ if [[ -e "$input_file" ]]; then
         song_url=$(echo "$line" | grep -oP '(?<=song_link=").*?(?=")')
         # artist_name=$(echo "$line" | grep -oP '(?<=artist_name=").*?(?=")')
         release_year=$(echo "$line" | grep -oP '(?<=year=")\d*?(?=")')
-
+        
         
         
         cd "$track_destination"
@@ -148,17 +150,17 @@ if [[ -e "$input_file" ]]; then
             
             # Rename the track's name to song_name
             mv "$song_file_name" "$song_name.m4a"
-
+            
             # Removing track's album cover art
             AtomicParsley "$song_path" --artwork REMOVE_ALL --overWrite > /dev/null 2>&1
-
-            #Add new album art cover, track artist name, album name, release year and track index            
+            
+            #Add new album art cover, track artist name, album name, release year and track index
             AtomicParsley "$song_path" --artwork "$album_image_path" --artist "$artist_name" --album "$album_name" --year $release_year --tracknum $song_index --overWrite > /dev/null 2>&1
-
+            
             rm -rf "$song_decription"
             echo "🗹 ($formatted_track_index): $song_name"
             
-
+            
         fi
         cd ~
         
@@ -167,7 +169,7 @@ if [[ -e "$input_file" ]]; then
         
         
     done < "$input_file"
-    
+    echo ""
     echo "-----------------------------------------------"
     echo "Download complete!"
     echo ""
