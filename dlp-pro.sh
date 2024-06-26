@@ -138,7 +138,7 @@ if [[ -e "$input_file" ]]; then
             
             # Example usage
             artist_name=$(file_to_artist_name "$song_decription")
-
+            
             
             # Rename song file
             mv "$song_file_name" "$song_name.m4a"
@@ -168,7 +168,16 @@ if [[ -e "$input_file" ]]; then
     echo ""
     
 else
-    echo "ALERT: Invalid peramiter"
+    echo -e "\033[1m! ALERT\033[0m: PATH is not valid"
+    echo ""
+    echo "Valid example:"
+    echo "(✔): dlp-pro 'Album name.txt'"
+    echo ""
+    echo "Unvalid Example:"
+    echo "(✗): dlp-pro Album name.txt"
+    echo ""
+    
+    
     
 fi
 
