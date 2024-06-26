@@ -165,6 +165,7 @@ if [[ -e "$input_file" ]]; then
     
     echo "-----------------------------------------------"
     echo "Download complete!"
+    echo ""
     
 else
     echo "ALERT: Invalid peramiter"
