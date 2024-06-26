@@ -1,7 +1,7 @@
 
 input_file="$1"
 # dlp_song_des='hello.md'
-total_song=1
+total_song=0
 destination=~/Music/DLP-PRO
 
 # Song destination Folder
@@ -52,7 +52,7 @@ if [[ -e "$input_file" ]]; then
     format_total_song=$(printf "%02d" "$total_song")
     
     # Print the number of song
-    echo "➣ [$format_total_song]: Totall Song"
+    echo "➣ [$format_total_song]: Track"
     echo "-----------------------------------------------"
     while read -r line; do
         song_index=$(echo "$line" | grep -oP '(?<=song_index=)\d+')
