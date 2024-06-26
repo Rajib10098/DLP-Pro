@@ -2,7 +2,7 @@
 input_file="$1"
 # dlp_song_des='hello.md'
 totall_song=1
-destination=~/ProDLP
+destination=~/Music/DLP-PRO
 
 # Song destination Folder
 if [[ ! -e "$destination" ]]; then
