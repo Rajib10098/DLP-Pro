@@ -21,10 +21,10 @@ if [[ -e "$input_file" ]]; then
     
     # Creating Song Folder
     if [[ -e "$song_destination" ]]; then
-        echo "➣ Song Folder: '$song_destination'"
+        echo "🗹 Track Folder: '$song_destination'"
     else
         mkdir "$song_destination"
-        echo "➣ Song Folder: '$song_destination' (created)"
+        echo "🗹 Track Folder: '$song_destination' (created)"
         
     fi
     
@@ -38,7 +38,7 @@ if [[ -e "$input_file" ]]; then
     # Downloading album image
     if [[ ! -e "$album_image_path" ]]; then
         wget -O "$album_image_path" "$alnum_image_url" > /dev/null 2>&1
-        echo "➣ Album Cover Art (downloaded)"
+        echo "🗹 Album Cover Art (downloaded)"
         
     fi
     
@@ -52,7 +52,12 @@ if [[ -e "$input_file" ]]; then
     format_total_song=$(printf "%02d" "$total_song")
     
     # Print the number of song
-    echo "➣ [$format_total_song]: Track"
+    
+    if [[ "$total_song" == "1" ]]; then
+        echo "🗹 ($format_total_song): Track"
+    else
+        echo "🗹 ($format_total_song): Tracks"
+    fi
     echo "-----------------------------------------------"
     while read -r line; do
         song_index=$(echo "$line" | grep -oP '(?<=song_index=)\d+')
