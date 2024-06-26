@@ -16,15 +16,15 @@ if [[ -e "$input_file" ]]; then
     album_name=$(grep -m 1 -oP '(?<=album=").*?(?=")' "$input_file")
     
     # echo $alnum_image_url
-    song_destination="$destination/$album_name"
+    track_destination="$destination/$album_name"
     album_cover_art_folder="$destination/$album_name/Album Cover"
     
     # Creating Song Folder
-    if [[ -e "$song_destination" ]]; then
-        echo "🗹 Track Folder: '$song_destination'"
+    if [[ -e "$track_destination" ]]; then
+        echo "🗹 Track Folder: '$track_destination'"
     else
-        mkdir "$song_destination"
-        echo "🗹 Track Folder: '$song_destination' (created)"
+        mkdir "$track_destination"
+        echo "🗹 Track Folder: '$track_destination' (created)"
         
     fi
     
@@ -63,14 +63,14 @@ if [[ -e "$input_file" ]]; then
         song_index=$(echo "$line" | grep -oP '(?<=song_index=)\d+')
         formatted_track_index=$(printf "%02d" "$song_index")
         song_name=$(echo "$line" | grep -oP '(?<=song_name=").*?(?=")')
-        song_path="$song_destination/$song_name.m4a"
+        song_path="$track_destination/$song_name.m4a"
         song_url=$(echo "$line" | grep -oP '(?<=song_link=").*?(?=")')
         # artist_name=$(echo "$line" | grep -oP '(?<=artist_name=").*?(?=")')
         release_year=$(echo "$line" | grep -oP '(?<=year=")\d*?(?=")')
         # echo "$song_path"
         
         
-        cd "$song_destination"
+        cd "$track_destination"
         
         
         
