@@ -23,9 +23,8 @@ verticle_bar = re.sub(r'\|', '🭲', colon)
 less_then = re.sub(r'<', '＜', verticle_bar)
 greater_then = re.sub(r'>', '＞', less_then)
 question_mark = re.sub(r'\?', '？', greater_then)
-and_symbol = re.sub(r'&amp;', '&', question_mark)
 
 
 
 
-print(and_symbol)  # Output: Hi, world! Hi, everyone!
+print(question_mark)  # Output: Hi, world! Hi, everyone!
